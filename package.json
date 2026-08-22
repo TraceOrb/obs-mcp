@@ -21,7 +21,10 @@
     "typecheck": "tsc --noEmit",
     "build": "tsc -p tsconfig.build.json",
     "prepublishOnly": "npm run build",
-    "prepare": "husky"
+    "prepare": "husky",
+    "version:major": "npm version major && git push origin HEAD --follow-tags",
+    "version:minor": "npm version minor && git push origin HEAD --follow-tags",
+    "version:patch": "npm version patch && git push origin HEAD --follow-tags"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
