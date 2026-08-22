@@ -1,7 +1,7 @@
 {
   "name": "traceorb-mcp",
   "version": "0.1.1",
-  "description": "Traceorb MCP server for Cursor and other agents",
+  "description": "Traceorb MCP server for AI agents",
   "license": "MIT",
   "author": "Eduardo De Patta",
   "homepage": "https://traceorb.com",
