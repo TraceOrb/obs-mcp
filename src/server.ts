@@ -1,3 +1,5 @@
+import { createRequire } from 'node:module';
+
 // eslint-disable-next-line no-restricted-syntax
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 // eslint-disable-next-line no-restricted-syntax
@@ -7,6 +9,21 @@ import { z } from 'zod';
 import readMcpEnv from './env';
 import { fillPath, TOOL_DESCRIPTION, TRACEORB_TOOLS } from './tools';
 import traceorbGet from './traceorbGet';
+
+const requirePackageJson = createRequire(import.meta.url);
+
+function mcpPackageVersion(): string {
+  const pkg: unknown = requirePackageJson('../package.json');
+  if (typeof pkg !== 'object' || pkg === null) {
+    throw new Error('package.json is required');
+  }
+
+  if (!('version' in pkg) || typeof pkg.version !== 'string') {
+    throw new Error('package.json version is required');
+  }
+
+  return pkg.version;
+}
 
 const toolInputShape = {
   requestId: z.string().optional(),
@@ -53,7 +70,7 @@ export default async function startMcpServer(): Promise<void> {
   const env = readMcpEnv();
   const server = new McpServer({
     name: 'traceorb',
-    version: '0.1.0',
+    version: mcpPackageVersion(),
   });
 
   for (const tool of TRACEORB_TOOLS) {
