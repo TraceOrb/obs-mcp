@@ -1,12 +1,12 @@
 import readMcpEnv from './env';
+import startMcpServer from './server';
 
-function main(): void {
+async function main(): Promise<void> {
   readMcpEnv();
+  await startMcpServer();
 }
 
-try {
-  main();
-} catch (error) {
+main().catch(function onError(error: unknown) {
   if (error instanceof Error) {
     console.error(error.message);
     process.exit(1);
@@ -14,4 +14,4 @@ try {
 
   console.error('TRACEORB_READ_KEY is required');
   process.exit(1);
-}
+});
