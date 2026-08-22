@@ -22,9 +22,3 @@ Create a **read key** in Traceorb Settings. Paste this into `~/.cursor/mcp.json`
 ```
 
 `TRACEORB_READ_KEY` is required. `TRACEORB_API_URL` defaults to `https://api.traceorb.com`. Node and `npx` must be on `PATH`.
-
-The key reads this org's telemetry, including already-redacted bodies. Do not put a write key here.
-
-## Limits
-
-Starter 6, Monthly 24, Scale 60 reads per minute. At most two in-flight queries. `429` includes `Retry-After`.
