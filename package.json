@@ -19,7 +19,7 @@
     "test": "vitest run",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && node scripts/fix-esm-extensions.mjs",
     "prepublishOnly": "npm run build",
     "prepare": "husky",
     "version:major": "npm version major && git push origin HEAD --follow-tags",
