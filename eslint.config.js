@@ -2,8 +2,12 @@ import eslint from '@eslint/js';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import tseslint from 'typescript-eslint';
 
-function isAllowedEslintDirective(value) {
-  const trimmed = value.trim();
+function isAllowedComment(comment) {
+  if (comment.type === 'Shebang') {
+    return true;
+  }
+
+  const trimmed = comment.value.trim();
   if (trimmed.startsWith('eslint-disable-next-line')) {
     return true;
   }
@@ -22,7 +26,7 @@ const noCommentPlugin = {
           Program() {
             const comments = context.sourceCode.getAllComments();
             for (const comment of comments) {
-              if (isAllowedEslintDirective(comment.value)) {
+              if (isAllowedComment(comment)) {
                 continue;
               }
 

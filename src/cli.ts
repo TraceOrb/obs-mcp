@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import readMcpEnv from './env';
 import startMcpServer from './server';
 
