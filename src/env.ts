@@ -1,3 +1,5 @@
+import { DEFAULT_API_URL } from './constants';
+
 export default function readMcpEnv(): {
   readKey: string;
   apiUrl: string;
@@ -7,7 +9,7 @@ export default function readMcpEnv(): {
     throw new Error('TRACEORB_READ_KEY is required');
   }
 
-  let apiUrl = 'https://api.traceorb.com';
+  let apiUrl = DEFAULT_API_URL;
   const fromEnv = process.env.TRACEORB_API_URL;
   if (fromEnv !== undefined && fromEnv !== '') {
     apiUrl = fromEnv;
