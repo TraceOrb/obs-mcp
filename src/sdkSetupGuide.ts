@@ -44,6 +44,12 @@ defer obs.Close()
 
 Keep the write key in server-side environment variables. Never expose it to client code or commit it.`;
 
+const GIN_INSTALL = `### Install the separate Gin module
+
+\`\`\`bash
+go get github.com/TraceOrb/obs-sdk-go/gin
+\`\`\``;
+
 const EXPRESS_MIDDLEWARE = `## Express middleware
 
 \`\`\`ts
@@ -147,6 +153,8 @@ const TAGS_INTRO = `## Tags
 
 Use low-cardinality business dimensions such as \`plan\`, \`tenant\`, \`region\`, and \`channel\`. Set tags early in the request, after trusted context resolves.
 
+Represent business dimensions as tags now so phase 3 queries can group them with \`groupBy=tag:<key>\`.
+
 Do not tag \`userId\`, email, IP, session ID, request ID, order ID, or another value unique per request. Those values create excessive cardinality and may contain PII. Stable business headers can seed a tag; use \`match\` only for a focused header lookup.`;
 
 const NODE_TAGS = `### Node
@@ -236,12 +244,19 @@ function selectedTopic(value: string | undefined): string {
   return 'all';
 }
 
-function addInstall(sections: string[], language: string): void {
+function addInstall(
+  sections: string[],
+  language: string,
+  runtime: string,
+): void {
   if (includesNode(language)) {
     sections.push(NODE_INSTALL);
   }
   if (includesGo(language)) {
     sections.push(GO_INSTALL);
+    if (runtime === 'gin' || runtime === 'auto') {
+      sections.push(GIN_INSTALL);
+    }
   }
 }
 
@@ -313,7 +328,7 @@ export default function buildSdkSetupGuide(args: SdkSetupGuideArgs): string {
   const sections = ['# Traceorb SDK setup guide'];
 
   if (topic === 'install' || topic === 'all') {
-    addInstall(sections, language);
+    addInstall(sections, language, runtime);
   }
   if (topic === 'middleware' || topic === 'all') {
     addMiddleware(sections, language, runtime);
