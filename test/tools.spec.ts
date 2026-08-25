@@ -3,7 +3,7 @@ import { describe, expect, test } from 'vitest';
 import { TRACEORB_TOOLS } from '../src/tools';
 
 describe('TRACEORB_TOOLS', () => {
-  test('exposes the ten query tools', () => {
+  test('exposes query and redact suggestion tools', () => {
     expect(
       TRACEORB_TOOLS.map(function nameOf(tool) {
         return tool.name;
@@ -19,7 +19,18 @@ describe('TRACEORB_TOOLS', () => {
       'list_alert_incidents',
       'get_alert_incident',
       'get_firing_count',
+      'suggest_redact_keys',
     ]);
+  });
+
+  test('maps redact suggestions to the candidates endpoint', () => {
+    expect(
+      TRACEORB_TOOLS.find(function isSuggestRedactKeys(tool) {
+        return tool.name === 'suggest_redact_keys';
+      }),
+    ).toMatchObject({
+      pathTemplate: '/v1/redact/candidates',
+    });
   });
 
   test('names do not include sql ingest or webhook', () => {
