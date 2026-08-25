@@ -4,8 +4,10 @@ import { createRequire } from 'node:module';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 // eslint-disable-next-line no-restricted-syntax
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { z } from 'zod';
 
 import readMcpEnv from './env';
+import buildSdkSetupGuide from './sdkSetupGuide';
 import { TOOL_SCHEMAS } from './toolSchemas';
 import { fillPath, TOOL_DESCRIPTION, TRACEORB_TOOLS } from './tools';
 import traceorbGet from './traceorbGet';
@@ -77,6 +79,33 @@ export default async function startMcpServer(): Promise<void> {
       },
     );
   }
+
+  server.registerTool(
+    'sdk_setup_guide',
+    {
+      description:
+        'Return a local Traceorb SDK setup guide and repository code-scan playbook. Does not call the Traceorb API or inspect source code.',
+      inputSchema: z.object({
+        language: z.enum(['node', 'go', 'both']).optional(),
+        runtime: z
+          .enum(['express', 'fastify', 'net/http', 'gin', 'auto'])
+          .optional(),
+        topic: z
+          .enum(['install', 'middleware', 'redact', 'tags', 'code_scan', 'all'])
+          .optional(),
+      }),
+    },
+    async function handleSdkSetupGuide(args) {
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: buildSdkSetupGuide(args),
+          },
+        ],
+      };
+    },
+  );
 
   const transport = new StdioServerTransport();
   await server.connect(transport);
