@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest';
 
-import { TOOL_SCHEMAS } from '../src/toolSchemas';
+import { HTTP_TOOL_SCHEMAS } from '../src/schemas/httpToolSchemas';
 
-describe('TOOL_SCHEMAS', () => {
+describe('HTTP_TOOL_SCHEMAS', () => {
   test('list_requests includes range and match but not groupBy', () => {
-    const keys = Object.keys(TOOL_SCHEMAS.list_requests.shape);
+    const keys = Object.keys(HTTP_TOOL_SCHEMAS.list_requests.shape);
 
     expect(keys).toContain('range');
     expect(keys).toContain('match');
@@ -12,13 +12,16 @@ describe('TOOL_SCHEMAS', () => {
   });
 
   test('get_firing_count has no list filters', () => {
-    expect(Object.keys(TOOL_SCHEMAS.get_firing_count.shape)).toEqual([]);
+    expect(Object.keys(HTTP_TOOL_SCHEMAS.get_firing_count.shape)).toEqual([]);
   });
 
   test('uses only the parameters supported by each endpoint', () => {
     expect(
       Object.fromEntries(
-        Object.entries(TOOL_SCHEMAS).map(function schemaKeys([name, schema]) {
+        Object.entries(HTTP_TOOL_SCHEMAS).map(function schemaKeys([
+          name,
+          schema,
+        ]) {
           return [name, Object.keys(schema.shape)];
         }),
       ),

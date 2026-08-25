@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
-import type { TraceorbToolName } from './tools';
+import type { TraceorbHttpToolName } from '../catalog/toolNames';
 
 const optionalString = z.string().optional();
 
-export const TOOL_SCHEMAS = {
+export const HTTP_TOOL_SCHEMAS = {
   query_metrics: z.object({
     range: optionalString,
     method: optionalString,
@@ -76,4 +76,4 @@ export const TOOL_SCHEMAS = {
   suggest_redact_keys: z.object({
     range: optionalString,
   }),
-} satisfies Record<TraceorbToolName, z.ZodObject<z.ZodRawShape>>;
+} satisfies Record<TraceorbHttpToolName, z.ZodObject<z.ZodRawShape>>;

@@ -4,17 +4,25 @@ import { createRequire } from 'node:module';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 // eslint-disable-next-line no-restricted-syntax
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { z } from 'zod';
 
+import fillPath from './catalog/fillPath';
+import {
+  TRACEORB_HTTP_TOOLS,
+  httpToolDescription,
+} from './catalog/httpTools';
+import { MAX_RESPONSE_BYTES, PACKAGE_NAME } from './constants';
 import readMcpEnv from './env';
-import buildSdkSetupGuide from './sdkSetupGuide';
-import { TOOL_SCHEMAS } from './toolSchemas';
-import { fillPath, TOOL_DESCRIPTION, TRACEORB_TOOLS } from './tools';
-import traceorbGet from './traceorbGet';
-import truncateResponseText from './truncateResponse';
+import buildSdkSetupGuide from './guide/buildSdkSetupGuide';
+import traceorbGet from './http/traceorbGet';
+import truncateResponseText from './http/truncateResponse';
+import { HTTP_TOOL_SCHEMAS } from './schemas/httpToolSchemas';
+import {
+  SDK_SETUP_GUIDE_DESCRIPTION,
+  SDK_SETUP_GUIDE_INPUT_SCHEMA,
+  SDK_SETUP_GUIDE_TOOL_NAME,
+} from './schemas/sdkSetupGuideInput';
 
 const requirePackageJson = createRequire(import.meta.url);
-const MAX_RESPONSE_BYTES = 256 * 1024;
 
 function mcpPackageVersion(): string {
   const pkg: unknown = requirePackageJson('../package.json');
@@ -43,18 +51,18 @@ function stringArgs(value: object): Record<string, string> {
 export default async function startMcpServer(): Promise<void> {
   const env = readMcpEnv();
   const server = new McpServer({
-    name: 'traceorb',
+    name: PACKAGE_NAME,
     version: mcpPackageVersion(),
   });
 
-  for (const tool of TRACEORB_TOOLS) {
+  for (const tool of TRACEORB_HTTP_TOOLS) {
     server.registerTool(
       tool.name,
       {
-        description: `${tool.description} ${TOOL_DESCRIPTION} GET ${tool.pathTemplate}.`,
-        inputSchema: TOOL_SCHEMAS[tool.name],
+        description: httpToolDescription(tool),
+        inputSchema: HTTP_TOOL_SCHEMAS[tool.name],
       },
-      async function handle(args: object) {
+      async function handleHttpTool(args: object) {
         const filled = fillPath({
           pathTemplate: tool.pathTemplate,
           args: stringArgs(args),
@@ -81,19 +89,10 @@ export default async function startMcpServer(): Promise<void> {
   }
 
   server.registerTool(
-    'sdk_setup_guide',
+    SDK_SETUP_GUIDE_TOOL_NAME,
     {
-      description:
-        'Return a local Traceorb SDK setup guide and repository code-scan playbook. Does not call the Traceorb API or inspect source code.',
-      inputSchema: z.object({
-        language: z.enum(['node', 'go', 'both']).optional(),
-        runtime: z
-          .enum(['express', 'fastify', 'net/http', 'gin', 'auto'])
-          .optional(),
-        topic: z
-          .enum(['install', 'middleware', 'redact', 'tags', 'code_scan', 'all'])
-          .optional(),
-      }),
+      description: SDK_SETUP_GUIDE_DESCRIPTION,
+      inputSchema: SDK_SETUP_GUIDE_INPUT_SCHEMA,
     },
     async function handleSdkSetupGuide(args) {
       return {

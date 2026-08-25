@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import traceorbGet from '../src/traceorbGet';
+import traceorbGet from '../src/http/traceorbGet';
 
 describe('traceorbGet', () => {
   afterEach(function restoreFetch() {

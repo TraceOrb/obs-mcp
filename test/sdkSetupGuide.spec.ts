@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest';
 
-import buildSdkSetupGuide from '../src/sdkSetupGuide';
+import buildSdkSetupGuide from '../src/guide/buildSdkSetupGuide';
+import { MAX_GUIDE_BYTES } from '../src/constants';
 
 describe('buildSdkSetupGuide', () => {
   test('code_scan playbook mentions redact and tags search areas', () => {
@@ -10,13 +11,15 @@ describe('buildSdkSetupGuide', () => {
       topic: 'code_scan',
     });
 
-    expect(text.includes('redactKeys') || text.includes('RedactKeys')).toBe(true);
+    expect(text.includes('redactKeys') || text.includes('RedactKeys')).toBe(
+      true,
+    );
     expect(
       text.toLowerCase().includes('settags') || text.includes('setTags'),
     ).toBe(true);
     expect(text.includes('userId')).toBe(true);
     expect(text.toLowerCase().includes('tour')).toBe(false);
-    expect(Buffer.byteLength(text, 'utf8')).toBeLessThanOrEqual(64 * 1024);
+    expect(Buffer.byteLength(text, 'utf8')).toBeLessThanOrEqual(MAX_GUIDE_BYTES);
   });
 
   test('node express install includes createClient', () => {
@@ -47,6 +50,16 @@ describe('buildSdkSetupGuide', () => {
       expect(text).toContain('go get github.com/TraceOrb/obs-sdk-go/gin');
     },
   );
+
+  test('go net/http install omits the Gin module', () => {
+    const text = buildSdkSetupGuide({
+      language: 'go',
+      runtime: 'net/http',
+      topic: 'install',
+    });
+
+    expect(text).not.toContain('go get github.com/TraceOrb/obs-sdk-go/gin');
+  });
 
   test('tags explains future business-dimension grouping without Tour or city', () => {
     const text = buildSdkSetupGuide({

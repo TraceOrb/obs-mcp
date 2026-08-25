@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import truncateResponseText from '../src/truncateResponse';
+import truncateResponseText from '../src/http/truncateResponse';
 
 describe('truncateResponseText', () => {
   test('returns payloads within the byte limit unchanged', () => {
