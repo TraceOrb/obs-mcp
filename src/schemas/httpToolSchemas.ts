@@ -20,6 +20,8 @@ export const HTTP_TOOL_SCHEMAS = {
     hasError: optionalString,
     search: optionalString,
     tag: optionalString,
+    match: optionalString,
+    groupBy: optionalString,
   }),
   query_daily_metrics: z.object({
     range: optionalString,
@@ -52,6 +54,8 @@ export const HTTP_TOOL_SCHEMAS = {
     search: optionalString,
     tag: optionalString,
     match: optionalString,
+    after: optionalString,
+    fields: optionalString,
   }),
   get_request: z.object({
     requestId: z.string(),

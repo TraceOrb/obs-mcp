@@ -41,6 +41,8 @@ describe('HTTP_TOOL_SCHEMAS', () => {
         'hasError',
         'search',
         'tag',
+        'match',
+        'groupBy',
       ],
       query_daily_metrics: [
         'range',
@@ -73,6 +75,8 @@ describe('HTTP_TOOL_SCHEMAS', () => {
         'search',
         'tag',
         'match',
+        'after',
+        'fields',
       ],
       get_request: ['requestId'],
       compare_request: ['requestId', 'baseline'],
