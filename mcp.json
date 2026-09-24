@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "traceorb": {
+      "command": "npx",
+      "args": ["-y", "traceorb-mcp@latest"],
+      "env": {
+        "TRACEORB_READ_KEY": "${TRACEORB_READ_KEY}",
+        "TRACEORB_API_URL": "https://api.traceorb.com"
+      }
+    }
+  }
+}

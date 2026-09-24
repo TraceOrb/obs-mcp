@@ -1,0 +1,25 @@
+{
+  "name": "traceorb",
+  "version": "0.4.0",
+  "description": "Read API request telemetry from a Traceorb workspace: list requests, open one, and check alerts.",
+  "author": {
+    "name": "Traceorb",
+    "email": "admin@traceorb.com"
+  },
+  "homepage": "https://traceorb.com",
+  "repository": "https://github.com/TraceOrb/obs-mcp",
+  "license": "MIT",
+  "keywords": ["observability", "api", "requests", "alerts"],
+  "logo": "assets/logo.svg",
+  "variables": {
+    "type": "object",
+    "properties": {
+      "TRACEORB_READ_KEY": {
+        "type": "string",
+        "title": "Read key",
+        "description": "Read key from Traceorb Settings. Shown once when created."
+      }
+    },
+    "required": ["TRACEORB_READ_KEY"]
+  }
+}
