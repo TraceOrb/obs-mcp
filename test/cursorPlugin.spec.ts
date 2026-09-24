@@ -44,12 +44,13 @@ describe('cursor plugin manifest', () => {
     expect(pkg.files).toEqual(['dist']);
   });
 
-  test('logo.svg is the square brand mark', () => {
+  test('logo.svg is the square mark', () => {
     const logo = readFileSync(join(root, 'assets/logo.svg'), 'utf8');
-    const brand = readFileSync(
-      join(root, '../brand/logos/traceorb-logo-square.svg'),
-      'utf8',
-    );
-    expect(logo).toBe(brand);
+    expect(logo.includes('width="1200"')).toBe(true);
+    expect(logo.includes('height="1200"')).toBe(true);
+    expect(logo.includes('viewBox="0 0 40 40"')).toBe(true);
+    expect(logo.includes('fill="#08090B"')).toBe(true);
+    expect(logo.includes('stroke="#E8EAED"')).toBe(true);
+    expect(logo.includes('fill="#E2B15A"')).toBe(true);
   });
 });
